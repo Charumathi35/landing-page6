@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricol Group</title>
+  <meta name="description"
+    content="Explore the Pricol Holdings conglomerate – 12 companies spanning Automotive, Engineering, Travel, Hospitality, Logistics, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <canvas id="bg-canvas"></canvas>
+
+  <div id="intro-screen">
+    <div class="intro-logo">
+      <div class="intro-logo-ring"></div>
+      <div class="intro-logo-inner">
+        <img src="logo_icon.png" alt="Pricol Logo" class="intro-logo-img" />
+      </div>
+    </div>
+    <h1 class="intro-title">Pricol Group</h1>
+    <div class="intro-progress-bar">
+      <div class="intro-progress-fill"></div>
+    </div>
+  </div>
+
+  <nav id="main-nav">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <img src="logo_icon.png" alt="Pricol Logo" class="nav-logo-img" />
+      </div>
+      <span>Pricol Group</span>
+    </div>
+    <!-- <div class="nav-links">
+      <a href="#journey">Journey</a>
+      <a href="#companies">Companies</a>
+      <a href="#about">About</a>
+    </div> -->
+  </nav>
+
+  <main id="journey">
+    <div class="hud-right">
+      <div class="hud-label">ACTIVE SECTOR</div>
+      <div class="hud-value" id="hud-sector">AUTOMOTIVE</div>
+    </div>
+
+    <!-- Top 50% Area -->
+    <div id="top-section">
+      <div id="company-panel" class="company-panel">
+        <div class="panel-eyebrow" id="panel-eyebrow">SECTOR: AUTOMOTIVE</div>
+        <h2 class="panel-title" id="panel-title">Pricol Limited</h2>
+        <a class="panel-link" id="panel-link" href="#" target="_blank" rel="noopener">
+          <span>Explore Related Products</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Bottom 50% Area -->
+    <div id="bottom-section">
+      <svg id="journey-svg" viewBox="0 0 1920 600" preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="node-glow">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+          <filter id="path-glow">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+          <linearGradient id="path-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1a0533" stop-opacity="0.2" />
+            <stop offset="25%" stop-color="#7c3aed" stop-opacity="1" />
+            <stop offset="50%" stop-color="#00d4ff" stop-opacity="1" />
+            <stop offset="75%" stop-color="#7c3aed" stop-opacity="1" />
+            <stop offset="100%" stop-color="#1a0533" stop-opacity="0.2" />
+          </linearGradient>
+          <linearGradient id="glow-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#7c3aed" stop-opacity="0" />
+            <stop offset="30%" stop-color="#7c3aed" stop-opacity="0.4" />
+            <stop offset="50%" stop-color="#00d4ff" stop-opacity="0.8" />
+            <stop offset="70%" stop-color="#7c3aed" stop-opacity="0.4" />
+            <stop offset="100%" stop-color="#7c3aed" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <path id="journey-path-glow" class="path-glow" fill="none" stroke="url(#glow-gradient)" stroke-width="16"
+          filter="url(#path-glow)" />
+        <path id="journey-path" class="path-main" fill="none" stroke="url(#path-gradient)" stroke-width="4" />
+
+        <g id="nodes-group"></g>
+      </svg>
+    </div>
+
+  </main>
+
+
+  <!-- <footer class="footer">
+    <div class="footer-brand">
+      <img src="logo_icon.png" alt="Pricol Logo" class="footer-logo-img" />
+    </div>
+    <p>© 2026 Pricol Holdings Private Limited.</p>
+  </footer> -->
+
+  <script src="app.js"></script>
+</body>
+
+</html>
