@@ -172,13 +172,14 @@ body {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-weight: 600;
+  gap: 16px;
+  font-weight: 700;
+  font-size: 3rem;
 }
 
 .nav-logo {
-  width: 44px;
-  height: 44px;
+  width: 76px;
+  height: 76px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,7 +234,7 @@ body {
 /* ── MAIN STAGE ── */
 #journey {
   position: relative;
-  min-height: 100vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -241,16 +242,19 @@ body {
 }
 
 #top-section {
-  flex: 1; /* top 50% */
+  flex: 1;
+  /* top 50% */
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding-top: 140px; /* Pushed further down as requested */
+  padding-top: 70px;
+  /* Pushed further down as requested */
 }
 
 #bottom-section {
-  flex: 1; /* bottom 50% */
+  flex: 1;
+  /* bottom 50% */
   position: relative;
   width: 100%;
 }
@@ -336,13 +340,13 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: all 0.4s var(--ease-smooth);
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
 }
 
 .node-group.active .node-outer {
-  fill: var(--purple-core);
-  stroke: var(--cyan);
-  stroke-width: 3.5px;
+  fill: var(--cyan);
+  stroke: var(--bg-dark);
+  stroke-width: 6px;
   r: 42;
   filter: drop-shadow(0 0 18px var(--cyan-glow)) drop-shadow(0 0 40px rgba(124, 58, 237, 0.5));
   animation: nodePulse 2s ease-in-out infinite;
@@ -358,8 +362,15 @@ body {
 }
 
 @keyframes nodePulse {
-  0%, 100% { filter: drop-shadow(0 0 12px var(--cyan-glow)) drop-shadow(0 0 30px rgba(124, 58, 237, 0.4)); }
-  50%       { filter: drop-shadow(0 0 28px var(--cyan-glow)) drop-shadow(0 0 60px rgba(124, 58, 237, 0.7)); }
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 12px var(--cyan-glow)) drop-shadow(0 0 30px rgba(124, 58, 237, 0.4));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 28px var(--cyan-glow)) drop-shadow(0 0 60px rgba(124, 58, 237, 0.7));
+  }
 }
 
 .node-label {
@@ -423,7 +434,7 @@ body {
   transform-style: preserve-3d;
   max-width: 800px;
   width: 90%;
-  margin: 0 auto;
+  margin: 80px auto 0;
 }
 
 .company-panel * {
@@ -448,7 +459,7 @@ body {
 }
 
 .panel-title {
-  font-size: 3.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
   line-height: 1;
   background: linear-gradient(135deg, #fff 20%, var(--cyan) 60%, var(--purple-pale) 100%);

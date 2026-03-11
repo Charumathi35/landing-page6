@@ -47,17 +47,16 @@ const SVG_W = 1920;
 const SVG_H = 600;
 
 function getSlotX(offset) {
-    if (offset === 0) return 400; // Active node on left downslope
-    if (offset < 0) return 400 + offset * 300; // Past nodes exit to left
-    // Upcoming nodes queue up on the right upslope
-    return 800 + (offset * 180);
+    if (offset === 0) return 350; // Active node strictly at the peak
+    if (offset < 0) return 350 + offset * 300; // Past nodes exit to left
+    // Upcoming nodes queue up along the dip and rise
+    return 550 + (offset * 180);
 }
 
 function initJourney() {
   const N = COMPANIES.length;
-  // A single fixed S-Curve mirroring the user's sketch
-  // Starts high left, drops to bottom middle, rises to right
-  const pathD = "M 0,200 Q 250,50 500,250 T 1100,500 T 1920,200";
+  // Curve matching the user's sketch, moved slightly upper
+  const pathD = "M -100,380 Q 150,150 350,150 C 700,150 900,480 1200,480 C 1500,480 1700,280 2000,280";
   
   // Apply path to all SVG components
   [journeyPath, journeyPathGlow].forEach(el => {
@@ -157,18 +156,25 @@ function setActive(index, immediate = false) {
     if (offset < -N/2) offset += N;
     if (offset > N/2) offset -= N;
 
+    const prevOffsetStr = g.getAttribute('data-offset');
+    let wrapAround = false;
+    if (prevOffsetStr !== null) {
+      if (Math.abs(offset - parseInt(prevOffsetStr, 10)) > 1) wrapAround = true;
+    }
+    g.setAttribute('data-offset', offset);
+
     const isActive = (offset === 0);
     g.classList.toggle('active', isActive);
 
     const targetX = getSlotX(offset);
     const pt = getPathPointAtX(journeyPath, targetX, pathLength);
 
-    if (immediate) {
+    if (immediate || wrapAround) {
       g.style.transition = 'none';
-      g.style.opacity = (targetX > -100 && targetX < 2100) ? '1' : '0';
+      g.style.opacity = (offset >= 0 && targetX < 2100) ? '1' : '0';
     } else {
       g.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s';
-      g.style.opacity = (targetX > -100 && targetX < 2100) ? '1' : '0';
+      g.style.opacity = (offset >= 0 && targetX < 2100) ? '1' : '0';
     }
     
     g.style.transform = `translate(${pt.x}px, ${pt.y}px)`;
@@ -192,7 +198,7 @@ function setActive(index, immediate = false) {
 
 function updatePanel(company) {
   document.getElementById('panel-title').textContent = company.name;
-  document.getElementById('panel-eyebrow').textContent = `SECTOR: ${company.sector}`;
+  // Removed panel-eyebrow update
   document.getElementById('panel-link').href = company.link;
 }
 
