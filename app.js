@@ -34,7 +34,6 @@ const journeyPath = document.getElementById('journey-path');
 const journeyPathGlow = document.getElementById('journey-path-glow');
 const nodesGroup = document.getElementById('nodes-group');
 const companyPanel = document.getElementById('company-panel');
-const hudSector = document.getElementById('hud-sector');
 
 window.addEventListener('load', () => {
   initBackground();
@@ -47,16 +46,21 @@ const SVG_W = 1920;
 const SVG_H = 600;
 
 function getSlotX(offset) {
-    if (offset === 0) return 350; // Active node strictly at the peak
-    if (offset < 0) return 350 + offset * 300; // Past nodes exit to left
-    // Upcoming nodes queue up along the dip and rise
-    return 550 + (offset * 180);
+    const isMobile = window.innerWidth <= 1000;
+    if (offset === 0) return isMobile ? 180 : 350; // Active node
+    if (offset < 0) return (isMobile ? 180 : 350) + offset * 300; // Past nodes
+    
+    // Spread upcoming nodes
+    const rightStart = isMobile ? 380 : 850;
+    const spacing = isMobile ? 160 : 250; 
+    
+    return rightStart + (offset - 1) * spacing;
 }
 
 function initJourney() {
   const N = COMPANIES.length;
-  // Curve matching the user's sketch, moved slightly upper
-  const pathD = "M -100,380 Q 150,150 350,150 C 700,150 900,480 1200,480 C 1500,480 1700,280 2000,280";
+  // Adjusted path to have a more pronounced dip and rise on the right side to fill space
+  const pathD = "M -150,350 Q 100,120 350,120 C 650,120 850,350 1200,350 C 1550,350 1750,160 2200,160";
   
   // Apply path to all SVG components
   [journeyPath, journeyPathGlow].forEach(el => {
@@ -151,7 +155,6 @@ function setActive(index, immediate = false) {
   const N = COMPANIES.length;
 
   document.querySelectorAll('.node-group').forEach((g, i) => {
-    // calculate circular offset distance
     let offset = i - activeIndex;
     if (offset < -N/2) offset += N;
     if (offset > N/2) offset -= N;
@@ -169,16 +172,26 @@ function setActive(index, immediate = false) {
     const targetX = getSlotX(offset);
     const pt = getPathPointAtX(journeyPath, targetX, pathLength);
 
-    if (immediate || wrapAround) {
+    const isMobile = window.innerWidth <= 1000;
+    let targetOpacity = 0;
+    if (offset === 0) {
+      targetOpacity = 1;
+    } else if (offset > 0) {
+      targetOpacity = offset <= (isMobile ? 2 : 5) ? 1 : 0;
+    }
+
+    if (immediate) {
       g.style.transition = 'none';
-      g.style.opacity = (offset >= 0 && targetX < 2100) ? '1' : '0';
+      g.style.opacity = targetOpacity.toString();
+    } else if (wrapAround) {
+      g.style.transition = 'none';
+      g.style.opacity = '0';
     } else {
       g.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s';
-      g.style.opacity = (offset >= 0 && targetX < 2100) ? '1' : '0';
+      g.style.opacity = targetOpacity.toString();
     }
     
     g.style.transform = `translate(${pt.x}px, ${pt.y}px)`;
-    
   });
 
   // ── PANEL UPDATE ──
@@ -192,13 +205,11 @@ function setActive(index, immediate = false) {
   } else {
     updatePanel(company);
   }
-
-  hudSector.textContent = company.sector;
 }
 
 function updatePanel(company) {
   document.getElementById('panel-title').textContent = company.name;
-  // Removed panel-eyebrow update
+  document.getElementById('panel-desc').textContent = company.desc;
   document.getElementById('panel-link').href = company.link;
 }
 
@@ -208,10 +219,26 @@ let isScrolling = false;
 window.addEventListener('wheel', (e) => {
   if (isScrolling) return;
   isScrolling = true;
-  setTimeout(() => isScrolling = false, 1200); // throttle rapid scrolling
+  setTimeout(() => { isScrolling = false; }, 800);
   if (e.deltaY > 0) setActive(activeIndex + 1);
   else setActive(activeIndex - 1);
 });
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+window.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+}, {passive: true});
+
+window.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  if (touchStartX - touchEndX > 50) {
+    setActive(activeIndex + 1);
+  } else if (touchEndX - touchStartX > 50) {
+    setActive(activeIndex - 1);
+  }
+}, {passive: true});
 
 function initBackground() {
   const canvas = document.getElementById('bg-canvas');
